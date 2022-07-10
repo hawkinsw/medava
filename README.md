@@ -256,7 +256,7 @@ And on the other side of the pipeline ... add the following code for the `Pharma
 ```Java
 public class Pharmacy {
     public Pharmacy(String pharmacyName) {
-        name = pharmacyName;
+        mPharmacyName = pharmacyName;
     }
     public boolean send(Transporter t) {
         Medicine advil = new Medicine("Advil");
@@ -265,10 +265,10 @@ public class Pharmacy {
     }
 
     public String pharmacyName() {
-        return name;
+        return mPharmacyName;
     }
 
-    private String name;
+    private String mPharmacyName;
 }
 ```
 
@@ -458,13 +458,13 @@ Add the following method implementations to the `Thrombolytic` class:
 ```Java
   @Override
   public double minimumTemperature() {
-    System.out.println("Getting the minimum safe temperature for a Thrombolytic drug");
+    System.out.println("Getting the minimum safe temperature for a Thrombolytic drug.");
     return 39.2;
   }
 
   @Override
   public double maximumTemperature() {
-    System.out.println("Getting the maximum safe temperature for a Thrombolytic drug");
+    System.out.println("Getting the maximum safe temperature for a Thrombolytic drug.");
     return 41.0;
   }
 ```
@@ -477,7 +477,7 @@ Let's say that I was typing too fast and wrote the following instead of what I w
 
 ```Java
   public double maximumTemperatur() {
-    System.out.println("Getting the maximum safe temperature for a Thrombolytic drug");
+    System.out.println("Getting the maximum safe temperature for a Thrombolytic drug.");
     return 41.0;
   }
 ```
@@ -520,7 +520,7 @@ Run the simulation. What do you notice? If your output does not match what is gi
 ```
 Adding a Advil to the transporter.
 Sending Advil on the LaserShip transporter.
-Getting the minimum safe temperature for a Thrombolytic drug
+Getting the minimum safe temperature for a Thrombolytic drug.
 Cannot load Thrombolytic on to the LaserShip transporter.
 Receiving Advil off the LaserShip transporter.
 ```
@@ -550,8 +550,8 @@ and rerun the simulation! Your output should look like this:
 ```
 Adding a Advil to the transporter.
 Sending Advil on the Priority Dispatch transporter.
-Getting the minimum safe temperature for a Thrombolytic drug
-Getting the maximum safe temperature for a Thrombolytic drug
+Getting the minimum safe temperature for a Thrombolytic drug.
+Getting the maximum safe temperature for a Thrombolytic drug.
 Adding a Thrombolytic to the transporter.
 Sending Thrombolytic on the Priority Dispatch transporter.
 Receiving Advil off the Priority Dispatch transporter.
@@ -579,12 +579,13 @@ public enum MedicineSchedule {
     Five(5),
     Uncontrolled(6);
 
-    private MedicineSchedule(int sched) {
-        schedule = sched;
+    private int mSchedule;
+    private MedicineSchedule(int schedule) {
+        mSchedule = schedule;
     }
 
     public String asString() {
-        switch (schedule) {
+        switch (mSchedule) {
             case 1:
                 return "Schedule One Medicine";
             case 2:
@@ -599,8 +600,6 @@ public enum MedicineSchedule {
                 return "Uncontrolled";
         }
     }
-
-    private int schedule;
 }
 
 ```
@@ -670,6 +669,7 @@ Now, back in the `Pharmacy` class we'll remove the instantiation of the `Medicin
 One final bit of clean up -- we have to specify the schedule of the `Thrombolytic`. Add the following method declaration to the `Thrombolytic` class:
 
 ```Java
+  @Override
   public MedicineSchedule getSchedule() {
     return MedicineSchedule.Uncontrolled;
   }
@@ -684,13 +684,14 @@ public class Oxycodone extends Medicine {
     super("Oxycodone");
   }
 
+  @Override
   public MedicineSchedule getSchedule() {
     return MedicineSchedule.Two;
   }
 }
 ```
 
-Based on the declaration of the `Oxycodone` class, what are going to be its minimum and maximum safe temperatures? Let's respecify what the pharmacy in our simulation produces:
+Based on the declaration of the `Oxycodone` class, what are going to be its minimum and maximum safe temperatures? Is the `@Override` annotation useful here? Let's respecify what the pharmacy in our simulation produces:
 
 ```Java
    public boolean send(Transporter t) {
@@ -755,8 +756,8 @@ If your output does not match the output below, go back and check for any typos:
 ```
 Adding a Ibuprofen to the transporter.
 Sending Ibuprofen on the Priority Dispatch transporter.
-Getting the minimum safe temperature for a Thrombolytic drug
-Getting the maximum safe temperature for a Thrombolytic drug
+Getting the minimum safe temperature for a Thrombolytic drug.
+Getting the maximum safe temperature for a Thrombolytic drug.
 Adding a Thrombolytic to the transporter.
 Sending Thrombolytic on the Priority Dispatch transporter.
 Adding a Oxycodone to the transporter.
@@ -1065,8 +1066,8 @@ Make sure that your program outputs the following. If it does not, go back and c
 
 ```
 Sending Ibuprofen on the Priority Dispatch transporter.
-Getting the minimum safe temperature for a Thrombolytic drug
-Getting the maximum safe temperature for a Thrombolytic drug
+Getting the minimum safe temperature for a Thrombolytic drug.
+Getting the maximum safe temperature for a Thrombolytic drug.
 Sending Thrombolytic on the Priority Dispatch transporter.
 Sending Oxycodone on the Priority Dispatch transporter.
 Sending Jarvik Artificial Heart on the Priority Dispatch transporter.
@@ -1177,8 +1178,8 @@ Make sure that your program in its final state has the following output:
 
 ```
 Sending Ibuprofen on the Priority Dispatch transporter.
-Getting the minimum safe temperature for a Thrombolytic drug
-Getting the maximum safe temperature for a Thrombolytic drug
+Getting the minimum safe temperature for a Thrombolytic drug.
+Getting the maximum safe temperature for a Thrombolytic drug.
 Sending Thrombolytic on the Priority Dispatch transporter.
 Sending Oxycodone on the Priority Dispatch transporter.
 Sending Jarvik Artificial Heart on the Priority Dispatch transporter.
