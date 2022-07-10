@@ -1132,7 +1132,7 @@ and its instantiation in the instance initializer:
         goods = new ArrayList<Shippable>();
 ```
 
-Then we'll change the methods `load` and `unload`:
+Then we'll change the methods `load` and `unload`. When you make the following changes, ***do not delete the version of the code that uses reflection -- just comment it out***.
 
 ```Java
     public Shippable unload() {
@@ -1147,7 +1147,7 @@ Then we'll change the methods `load` and `unload`:
     }
 ```
 
-Now, remind me where that other use of reflection was that we want to remove? Oh, right! The `Hospital`. We'll change the implementation of the `receive` method:
+Now, remind me where that other use of reflection was that we want to remove? Oh, right! The `Hospital`. We'll change the implementation of the `receive` method. Again, when you make the following changes, ***do not delete the version of the code that uses reflection -- just comment it out***.
 
 ```Java
     void receive(Transporter t) {
@@ -1164,7 +1164,7 @@ Now, remind me where that other use of reflection was that we want to remove? Oh
     }
 ```
 
-The final step is to confirm with Java that our `Medicine` class (and its subclasses) and `Jarvik` class meet the specifications of the `Shippable` interface. To do that we use the `implements` keyword:
+The final step is to confirm with Java that our `Medicine` class (and its subclasses) and `Jarvik` class meet the specifications of the `Shippable` interface. To do that we use the `implements` keyword (you may resume making overwriting changes now!):
 
 ```Java
 public class Jarvik implements Shippable {
