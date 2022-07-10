@@ -15,6 +15,14 @@ As for its support for typing, the language specification says it well:
 
 And yet Java is known for its dynamism. This mini assignment will also explore the tension that exists in Java as a result -- the tension between the language's dynamism and its strong-typing constraints.
 
+## Prerequisites:
+
+First things first: Clone this repository to your development machine! You are all experts at this by now, I am sure, but there are great resources online for learning/using `git` if you want to dig deeper: [Resource](https://git-scm.com/download/mac), [Resource](https://gitforwindows.org/), [Resource](https://git-scm.com/docs/gittutorial).
+
+Next, you will need a Java SDK and Maven to complete this assignment. I *highly* recommend that you use VS Code (whether you are on Windows or macOS). There are instructions for configuring the IDE on those platforms [online](https://code.visualstudio.com/docs/java/java-build). If you choose not to use VS Code, there is plenty of documentation for configuring [your](https://docs.oracle.com/en/java/javase/15/install/installation-jdk-macos.html) [environment](https://maven.apache.org/install.html) [online](https://docs.oracle.com/en/java/javase/11/install/installation-jdk-microsoft-windows-platforms.html).
+
+Away we go!
+
 ## The Situation
 
 In this mini assignment we are going to write an application that simulates a supply chain. We will build the application first to transport medicine between their manufacturer and the hospital and then slowly expand it (through generalization) to support simulations of different types of supply chains. The entire application is started and controlled by a `main` function (it's technically a method and we will return to this distinction below) in the `SupplyChain.java` file in `src` directory. Like C and C++ programs, all Java applications start with a so-called `main` function. Like the main functions in C and C++ programs, the `main` function in Java also has to have a very particular signature:
@@ -1206,3 +1214,11 @@ Some would say that we are all just living in a giant computer simulation. I don
 7. interfaces.
 
 This quick walk through only scratches on the surface of Java's power. It is a very interesting language and I encourage you to continue to learn more about it as you grow as professional programmers.
+
+## One More Thing ...
+
+Along with the code that you've written, for this assignment please create and submit a file named `questions.txt` (a plain text file) that contains several (the number is up to you) questions you had about Java as we worked through the material above. The list of questions is worth 1/2 of your grade for this assignment. Please make them thoughtful. I will grade them based on how well they reflect your engagement with the material above and the Java language overall. Feel free to include questions you have about OOP, in general, too. To be clear: I do not expect you to *know* the answer to the questions! In fact, quite the opposite! The more beffudled you are about something, the more likely that we will learn something together (because I can assure you that your questions will make me think!).
+
+## Submitting
+
+You will submit your response to this assignment to Gradescope as we have done in previous assignments. The autograder will expect that you submit *all* the `.java` files, the `pom.xml` file and a `questions.txt` file (in the same directory structure as they are in the skeleton). The easiest way to accomplish this gargantuan task is to create a zip file. Make sure that `pom.xml` and `questions.xml` are in the root of the directory structure of the zip file that you create. ***Please do not*** include any `.class` files (in other words, do not include the `target/` directory) in your submission. Make sure that the autograder awards you 50 points after you submit your code. If you have any trouble navigating the autograder's idiosyncracies, please contact me!
