@@ -348,8 +348,8 @@ Where before there was no constructor for the `Transporter` class, we will need 
 ```Java
     public Transporter(String transporterName, double lowTemp, double highTemp) {
         mTransporterName = transporterName;
-        lowTemperature = lowTemp;
-        highTemperature = highTemp;
+        mLowTemperature = lowTemp;
+        mHighTemperature = highTemp;
     }
 ```
 
