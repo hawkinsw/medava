@@ -492,7 +492,7 @@ Let's say that I was typing too fast and wrote the following instead of what I w
 
 Notice the typo? Yeah, neither did I! It's hard to. The code above would compile but you would not provide an alternate, subclass-specific implementation of the `maximumTemperature` function. Had the programmer used the `@Override` annotation, the compiler would have flagged the error. Pretty useful stuff!
 
-Now, let's update our simulation to attempt to ship one of these high-caliber medicines. First, update the code in the `Pharmacy` class to ship Thrombolytic medicines. Update the `send` method of the `Pharmacy` class to look like:
+Now, let's update our simulation to attempt to ship one of these high-caliber medicines. First, update the code in the `Pharmacy` class to ship thrombolytic medicines. Update the `send` method of the `Pharmacy` class to look like:
 
 ```Java
     public boolean send(Transporter t) {
@@ -570,13 +570,13 @@ Now that we are using a more specialized transportation provider we can safely s
 
 ## I'm Not Buying What You Are Selling
 
-To this point our restrictions have focused on whether the shipper feels comfortable sending something and *not* on whether the reciever feels safe [accepting a package](https://en.wikipedia.org/wiki/The_Package_(Seinfeld)). This state of affairs must change. Hospitals are sometimes not equipped to properly handle potentially addictive medications. So-called controlled substances are given a schedule number by the [Drug Enforcement Administration](https://www.dea.gov/drug-information/drug-scheduling) (from 1 to 5), with 1 being the most addictive (and least medically necessary) and 5 being the least addictive. We will add a "sixth" category that indicates that a medicine is not a controlled substance and, therefore, does not have a schedule. To hold this information about a medicine we will add a field to the `Medicine` class. 
+To this point our restrictions have focused on whether the shipper feels comfortable sending something and *not* on whether the receiver feels safe [accepting a package](https://en.wikipedia.org/wiki/The_Package_(Seinfeld)). This state of affairs must change. Hospitals are sometimes not equipped to properly handle potentially addictive medications. So-called controlled substances are given a schedule number by the [Drug Enforcement Administration](https://www.dea.gov/drug-information/drug-scheduling) (from 1 to 5), with 1 being the most addictive (and least medically necessary) and 5 being the least addictive. We will add a "sixth" category that indicates that a medicine is not a controlled substance and, therefore, does not have a schedule. To hold this information about a medicine we will add a field to the `Medicine` class.
 
 Just what type should that field be given? We *could* use an integer -- after all, 1, 2, 3, 4, 5 and 6 are all numbers. However, so, are 49, 32 and 67, but those aren't valid schedules. If we used an integer we would also be forced to use, gasp, magic values! In other words, we would have the constants `1`, `2`, `3`, etc littered throughout our code! 
 
-Think about all the different possible values for a variable that holds a schedule. We *listed* them above. You could even say that we *enumerated* them. Oh, yes! Let's use an enumerated value! Java provides great support for enumerated types -- types that specify only a certain, pre-determined set of valid values -- that allow us to give the value nice, descriptive names at the same time! What is even cooler is that in Java an enumerated type is just a special type of a class. As a result, you can do things with enumerated types in Java that you cannot do in other langauges (like write a constructor!). Woah.
+Think about all the different possible values for a variable that holds a schedule. We *listed* them above. You could even say that we *enumerated* them. Oh, yes! Let's use an enumerated value! Java provides great support for enumerated types -- types that specify only a certain, pre-determined set of valid values -- that allow us to give the value nice, descriptive names at the same time! What is even cooler is that in Java an enumerated type is just a special type of a class. As a result, you can do things with enumerated types in Java that you cannot do in other languages (like write a constructor!). Woah.
 
-Again, all public classes (and, therefore, enumerated types) must be put in a separate, appopriately named file. Define the `MedicineSchedule` enumeration this way in the `MedicineSchedule.java` class:
+Again, all public classes (and, therefore, enumerated types) must be put in a separate, appropriately named file. Define the `MedicineSchedule` enumeration this way in the `MedicineSchedule.java` class:
 
 ```Java
 public enum MedicineSchedule {
@@ -775,7 +775,7 @@ Accepted a shipment of Ibuprofen.
 Checking whether Hospital can receive Thrombolytic.
 Accepted a shipment of Thrombolytic.
 Checking whether Hospital can receive Oxycodone.
-I cannot receive controlled substances and Oxycodone is a Schedule Two Medicine.
+Hospital cannot receive controlled substances and Oxycodone is a Schedule Two Medicine.
 ```
 
 ## Part 2: Where Do We Stand?
@@ -847,7 +847,7 @@ What happens on the other side? On the `Hospital` side? Well, in the `receive` m
     }
 ```
 
-And now you immediately see Java's unhapiness: the compiler cannot guarantee that an instance of the `Object` class has the `getSchedule` nor the `getMedicineName` method! What are we to do? There's two options: an easy (but potentially incorrect) solution and a hard (but defensive, and always correct) solution. Let's start with the easy solution first.
+And now you immediately see Java's unhappiness: the compiler cannot guarantee that an instance of the `Object` class has the `getSchedule` nor the `getMedicineName` method! What are we to do? There's two options: an easy (but potentially incorrect) solution and a hard (but defensive, and always correct) solution. Let's start with the easy solution first.
 
 ## When You Assume
 
@@ -859,7 +859,7 @@ The easy solution is to assume that the objects that are unloaded from the `Tran
             Medicine unloaded = (Medicine)t.unload();
             System.out.println(String.format("Checking whether Hospital can receive %s.", unloaded.getMedicineName()));
             if (unloaded.getSchedule() != MedicineSchedule.Uncontrolled) {
-                System.out.println(String.format("I cannot receive controlled substances and %s is a %s.",
+                System.out.println(String.format("Hospital cannot receive controlled substances and %s is a %s.",
                         unloaded.getMedicineName(), unloaded.getSchedule().asString()));
             } else {
                 System.out.println(String.format("Accepted a shipment of %s.", unloaded.getMedicineName()));
@@ -963,7 +963,7 @@ Exception in thread "main" java.lang.ClassCastException: class edu.uc.cs3003.med
 
 Why? Because the `Hospital` eventually unloads an instance of the `Jarvik` class and that is *not* an instance (or subclass) of `Medicine` so the cast is invalid! But, but, but -- I know, I see it, too!
 
-`Jarvik` *is* a class that implements all the methods that we need to be able to add it to the `Transporter` -- there's a `getMedicineName`, there's a `isTemperatureRangeAcceptable`, there's even a `getSchedule`, even though it doesn't necessarily make sense. Java is [not impressed](). That static cast cannot complete because the static cast relies on nominal type equivalency and a `Jarvik` is not a `Medicine` (or subclass thereof). If Java used structural type equivalency, then we migth have had a chance! But here ... no dice!
+`Jarvik` *is* a class that implements all the methods that we need to be able to add it to the `Transporter` -- there's a `getMedicineName`, there's a `isTemperatureRangeAcceptable`, there's even a `getSchedule`, even though it doesn't necessarily make sense. Java is [not impressed](). That static cast cannot complete because the static cast relies on nominal type equivalency and a `Jarvik` is not a `Medicine` (or subclass thereof). If Java used structural type equivalency, then we might have had a chance! But here ... no dice!
 
 ## Mirror, Mirror On The Wall!
 
@@ -1047,7 +1047,7 @@ Now let's turn our attention to the `Hospital` class and reflect (hi-ooooooooooo
                 String getMedicineNameMethodResult = (String) getMedicineNameMethod.invoke(unloaded);
                 System.out.println(String.format("Checking whether Hospital can receive %s.", getMedicineNameMethodResult));
                 if (getScheduleMethodResult != MedicineSchedule.Uncontrolled) {
-                    System.out.println(String.format("I cannot receive controlled substances and %s is a %s.",
+                    System.out.println(String.format("Hospital cannot receive controlled substances and %s is a %s.",
                             getMedicineNameMethodResult, getScheduleMethodResult.asString()));
                 } else {
                     System.out.println(String.format("Accepted a shipment of %s.", getMedicineNameMethodResult));
@@ -1084,14 +1084,14 @@ Accepted a shipment of Ibuprofen.
 Checking whether Hospital can receive Thrombolytic.
 Accepted a shipment of Thrombolytic.
 Checking whether Hospital can receive Oxycodone.
-I cannot receive controlled substances and Oxycodone is a Schedule Two Medicine.
+Hospital cannot receive controlled substances and Oxycodone is a Schedule Two Medicine.
 Checking whether Hospital can receive Jarvik Artificial Heart.
 Accepted a shipment of Jarvik Artificial Heart.
 ```
 
 ## Who's the Fairest of Them All
 
-Reflection is a really powerful technique and a tool that we appreciate having in the toolchest. However, we should not rely on it when there are alternate methods. Reflection is definitely not the fastest way to accomplish our goal here. Determing at runtime whether an object supports certain methods is much slower than letting the compiler do it before the program is ever even executed. 
+Reflection is a really powerful technique and a tool that we appreciate having in the toolchest. However, we should not rely on it when there are alternate methods. Reflection is definitely not the fastest way to accomplish our goal here. Determining at runtime whether an object supports certain methods is much slower than letting the compiler do it before the program is ever even executed.
 
 Does Java give us a way to solve the problem? Let's first remind ourselves what the problem actually is: 
 
@@ -1205,7 +1205,7 @@ Accepted a shipment of Jarvik Artificial Heart.
 
 Some would say that we are all just living in a giant computer simulation. I don't believe it. However, we did work our way through creation of a very powerful simulation system that takes advantage of some very interesting parts of the Java OOP language. We learned about Java's 
 
-1. support for inheritence
+1. support for inheritance
 2. static methods
 3. abstract classes and methods
 4. support for virtual methods using the `@Override` annotation
@@ -1217,7 +1217,7 @@ This quick walk through only scratches on the surface of Java's power. It is a v
 
 ## One More Thing ...
 
-Along with the code that you've written, for this assignment please create and submit a file named `questions.txt` (a plain text file) that contains several (the number is up to you) questions you had about Java as we worked through the material above. The list of questions is worth 1/2 of your grade for this assignment. Please make them thoughtful. I will grade them based on how well they reflect your engagement with the material above and the Java language overall. Feel free to include questions you have about OOP, in general, too. To be clear: I do not expect you to *know* the answer to the questions! In fact, quite the opposite! The more beffudled you are about something, the more likely that we will learn something together (because I can assure you that your questions will make me think!).
+Along with the code that you've written, for this assignment please create and submit a file named `questions.txt` (a plain text file) that contains several (the number is up to you) questions you had about Java as we worked through the material above. The list of questions is worth 1/2 of your grade for this assignment. Please make them thoughtful. I will grade them based on how well they reflect your engagement with the material above and the Java language overall. Feel free to include questions you have about OOP, in general, too. To be clear: I do not expect you to *know* the answer to the questions! In fact, quite the opposite! The more befuddled you are about something, the more likely that we will learn something together (because I can assure you that your questions will make me think!).
 
 ## Submitting
 
