@@ -1,6 +1,6 @@
 ## Medava
 
-Java is an amazing language. The original designers, James Gosling, Bill Joy and Guy Steele, described it as, "... a general-purpose concurrent class-based object-oriented programming language" (sic). By now, as programming-language enthusiasts, you should recognize those words. In particular, we are focused here on the fact that they describe Java as as class-based (ie, *not* prototypal), object-oriented programming language. By virtue of its support for OOP and the criteria we set for such a language to be considered such a language, we can assume that Java supports
+Java is an amazing language. The original designers, James Gosling, Bill Joy and Guy Steele, described it as, "... a general-purpose concurrent class-based object-oriented programming language" (sic). By now, as programming-language enthusiasts, you should recognize those words. In particular, we are focused here on the fact that they describe Java as a class-based (ie, *not* prototypal), object-oriented programming language. By virtue of its support for OOP and the criteria we set for such a language to be considered such a language, we can assume that Java supports
 
 1. The *abstraction* of abstract data types (ADTs),
 2. Inheritance
@@ -11,9 +11,19 @@ In this mini assignment we will explore how Java meets each of these criteria an
 As for its support for typing, the language specification says it well:
 
 > The Java programming language is a statically typed language, which means that every variable and every expression has a type that is known at compile time.
+
 > The Java programming language is also a strongly typed language, because types limit the values that a variable ... can hold or that an expression can produce, limit the operations supported on those values, and determine the meaning of the operations. Strong static typing helps detect errors at compile time. 
 
 And yet Java is known for its dynamism. This mini assignment will also explore the tension that exists in Java as a result -- the tension between the language's dynamism and its strong-typing constraints.
+
+
+## Java is *Not* JavaScript
+
+To start, let's be very, very clear: Java is *not at all* related to JavaScript. JavaScript is a language that is specified through a group in the EU formerly known through the acronym ECMA which stood for European Computer Manufacturers Association. In 1994 the organization dropped its primary focus on Europe and became an international body. It became officially known as Ecma, which is *not* an acronym (in the same way that [KFC and Kentucky Fried Chicken may or may not be the same thing](https://www.snopes.com/fact-check/kfc-and-fried/)). The group's charter is to standardize information and computer systems. (This information is derived from the [Ecma website](https://www.ecma-international.org/about-ecma/history/)) As such, it is more accurate to refer to JavaScript as [ECMAScript](https://tc39.es/ecma262/). 
+
+ The original developer of JavaScript (Brandon Eich) was working for Netscape when he created the language and he is quick to remind everyone that the name JavaScript was just a ["marketing scam"](https://www.youtube.com/watch?v=WqMbzVWIAjY). The original code name for the language was Mocha and the second name was LiveScript (yes, I wrote code in LiveScript!). Brendan recalls that the goal for "Marc (Andreeson, founder of Netscape) and Bill (Joy, one of the founders of Sun Microsystems and original developer of Vi) was to make [JavaScript] the sidekick language to Java" [ref](https://www.youtube.com/watch?v=WqMbzVWIAjY).
+
+ In other words, beyond marketing and hype, Java and ECMAScript, nee JavaScript, have nothing to do with one another and are completely independent languages.
 
 ## Prerequisites:
 
@@ -21,11 +31,13 @@ First things first: Clone this repository to your development machine! You are a
 
 Next, you will need a Java SDK and Maven to complete this assignment. I *highly* recommend that you use VS Code (whether you are on Windows or macOS). There are instructions for configuring the IDE on those platforms [online](https://code.visualstudio.com/docs/java/java-build). If you choose not to use VS Code, there is plenty of documentation for configuring [your](https://docs.oracle.com/en/java/javase/15/install/installation-jdk-macos.html) [environment](https://maven.apache.org/install.html) [online](https://docs.oracle.com/en/java/javase/11/install/installation-jdk-microsoft-windows-platforms.html).
 
+An SDK is a system development kit and contains the pieces that you need to develop in a particular toolset, in this case Java. The Java SDK is known as the Java Development Kit (the JDK). The JDK gives you the ability to *write* and *compile* Java code. However, it does *not* give you the ability to *execute* Java code. The tool(s) that execute Java programs are known as Java Runtime Environments (JREs). Those tools are "sold separately", as they say. What do you think might be the reason why those two groups of tools would be distributed separately?
+
 Away we go!
 
 ## The Situation
 
-In this mini assignment we are going to write an application that simulates a supply chain. We will build the application first to transport medicine between their manufacturer and the hospital and then slowly expand it (through generalization) to support simulations of different types of supply chains. The entire application is started and controlled by a `main` function (it's technically a method and we will return to this distinction below) in the `SupplyChain.java` file in `src` directory. Like C and C++ programs, all Java applications start with a so-called `main` function. Like the main functions in C and C++ programs, the `main` function in Java also has to have a very particular signature:
+In this mini assignment we are going to write an application that simulates a supply chain. We will build the application first to transport medicines between their manufacturer and hospitals and then slowly expand it (through generalization) to support simulations of different types of supply chains. The entire application is started and controlled by a `main` function (it's technically a method and we will return to the distinction between methods and functions below) in the `SupplyChain.java` file in `src` directory. Like C and C++ programs, all Java applications start with a so-called `main` function. Like the main functions in C and C++ programs, the `main` function in Java also has to have a very particular signature:
 
 ```Java
 
@@ -34,19 +46,18 @@ public static void main(String args[]) {
 }
 ```
 
-If you are familiar with the signature of the `main` function in C and C++, nothing about this declaration will be surprising. The signature is defining a method (technically a `static` method) named `main` that takes an array of `String`s (of variable length) as a parameter. That array is filled with the values that are given on the *command line* when the program is executed. For the Medava application, we do not accept any input from the user when they execute the program so we will not deal with the `args` parameter any further.
+If you are familiar with the signature of the `main` function in C and C++, nothing about this declaration will be surprising. The signature is defining a method (technically a `static` method) named `main` that takes an array (of variable length) of `String`s as a parameter. That array is filled with the values that are given on the *command line* when the program is executed. For the Medava application, we do not accept any input from the user when they execute the program so we will not deal with the `args` parameter any further. Even though our application will not take any input from the user on the command line, we *must* keep that parameter. (*Note*: In C/C++, the `main` function also includes parameters where values from the command line are made accessible to be programmer. However, in C/C++, naming that parameter is optional.)
 
-What do the other components of the declaration indicate? There's a `static` and a `public`. We will talk about `public` later so let's focus on `static` here. Before doing that, we have to see more context around the `main` function -- we nee to realize that the `main` function is actually in a class! Why? Because everything in Java has to be in a class. In that sense, Java can be called a pure OOP language. Unlike C++ where standalone functions are allowed (because it is a hybrid between imperative and object-oriented), everything in Java must be contained in a class. 
+What do the other components of the declaration indicate? There's a `static` and a `public`. We will talk about `public` later so let's focus on `static` here. Before doing that, we have to see more context around the `main` function. Notice that the `main` function is actually in a class! Why? Because everything in Java has to be in a class. In that sense, Java can be called a pure OOP language. Unlike C++ where standalone functions are allowed (because it is a hybrid between imperative and object-oriented), everything in Java must be contained in a class. 
 
-If everything is a class, then all the subprograms that we define in Java are actually methods (which is not only the academic term of art but also the language-specific term that Java uses). Based on the definition of a method, we would expect that in order to execute one we must have instantiated an object of the type in which that method is declared! Normally, yes, that would be the case. However, the `static` keyword gives the programmer the power to be able to invoke the `main` function without having to instantiate a `SupplyChain` class. Where the syntax for invoking a non-`static` method is
-
+If everything is a class, then all the subprograms that we define in Java are actually methods (which is not only the academic term of art but also the language-specific term that Java uses). Based on the definition of a method, we would expect that in order to execute one we must have instantiated an object of the type in which that method is declared! Normally, yes, that would be the case. However, using `static` keyword modifier on a method makes that method a static method and gives the programmer the power to be able to invoke that method without having to instantiate its containing class. In this case, we do not have to instantiate a `SupplyChain` class to be able to call `main`. The syntax for invoking a non-`static` method requires an instance of the class:
 
 ```Java
 
 MyDataType mdt = new MyDataType();
 mdt.someMethod();
 ```
-invoking a static method (`someStaticMethod`) is invoked "on" the class itself:
+Whereas invoking a static method (`someStaticMethod`) does not require an instance:
 
 ```Java
 MyDataType.someStaticMethod();
@@ -54,7 +65,7 @@ MyDataType.someStaticMethod();
 
 As a result, `someStaticMethod` cannot make reference to any of the member variables (what Java calls *fields*) of the `MyDataType` class. Can you understand why? In an OOP each instance of a class has its own, private copy of all the member variables whose values are completely independent of the values of the member variables of any other instance. By invoking a method on a particular instance (`mdt` in the example above), the caller provides the method the context it needs to find those values. When the programmer calls a `static` method, the method gets no such context. It is, therefore, nonsensical for a `static` method to even think about member variables. It might make more sense if you use an alternate name for member variables: [*instance* variables.](https://en.wikipedia.org/wiki/Instance_variable)
 
-Because the `SupplyChain` class contains a `public`, `static` method named `main` with an appropriate set of parameters and return value, and that is the only class that we will compile that contains such a function, the Java *virtual machine* (JVM) will automatically invoke this function when the program is launched. After launching that function, the JVM will shepherd along program execution in whatever way the program's code defines.
+Because the `SupplyChain` class contains a `public`, `static` method named `main` with an appropriate set of parameters and return value, and that is the only class that we will compile that contains such a method, the Java *virtual machine* (JVM) will automatically invoke this method when the program is launched. After launching that method, the JVM will shepherd along program execution in whatever way the program's code defines.
 
 To witness this process in action (and confirm that your installation and configuration of Java is correct), add 
 
@@ -76,7 +87,7 @@ The pharmacy creates medicine and needs to ship it to the hospital. In the simul
 
 Let's start building the `Medicine` class. The `Medicine` class will be the *base class* (what Java calls a *superclass*) for all the medicines that are transportable between point A and point B in our simulation. We will add functionality to the class (and its subclasses [what Java also calls subclasses]) throughout the assignment but there are a few things that we can configure upfront.
 
-When the programmer *instantiates* (creates an instance of [unhelpfully]) a class (by using the `new` keyword to write a *[class instance creation expression](https://docs.oracle.com/javase/specs/jls/se18/html/jls-15.html#jls-15.9)*), the class' *constructor* is called. The constructor is like any other method in that it takes parameters. However, the constructor does not have a return type because, well, it doesn't return a value. The constructor for our `Medicine` class will take a single parameter -- the name of the medicine (as a `String`). 
+When the programmer *instantiates* (creates an instance of [unhelpfully]) a class (by using the `new` keyword to write a *[class instance creation expression](https://docs.oracle.com/javase/specs/jls/se18/html/jls-15.html#jls-15.9)*), the class' *constructor* is called. The constructor is like any other method in that it takes parameters. The job of the constructor is to perform any actions that are required to initialize an instance of that particular type (e.g., initialize instance variables, configure external resource access [database connections, file handles, network connections, etc]). However, the constructor does not actually return anything and, therefore, has no return type. The constructor for our `Medicine` class will take a single parameter -- the name of the medicine (as a `String`). 
 
 In the `Medicine` class in the `Medicine.java` file, write the following constructor:
 
@@ -140,7 +151,7 @@ So, what of `this.minimumTemperature()` and `this.maximumTemperature()`? Will, w
 
 > ... denotes a value that is a reference to the object for which the instance method was invoked ..., or to the object being constructed.
 
-That helps! So, we know that the current method invocation (on the `isTemperatureRangeAcceptable` method) and the code in those two method invocations will have access to fields of the same instance of the `Medicine` class. 
+That helps! So, we know that the current method invocation (on the `isTemperatureRangeAcceptable` method) and the code in those two method invocations will have access to fields of the same instance of the `Medicine` class via the `this` instance variable. 
 
 It also gives us a task: we must implement those methods so that the `isTemperatureRangeAcceptable` method can use them. Obviously not every medicine has the same range of safe temperatures. However, it seems clear that there is a baseline reasonable range of temperatures outside of which our medicine will spoil. In the `Medicine` superclass, then, we will provide a so-called *default* implementation of the two methods and we will leave it up to any subclasses to *override* these methods as a way to customize functionality specific to a type of medicine. In other words, our software will rely on the support for *virtual methods* in Java to increase programmer efficiency! Type in the following method declarations to `Medicine.java`:
 
@@ -156,6 +167,8 @@ It also gives us a task: we must implement those methods so that the `isTemperat
 ```
 
 That's a good start for the implementation of our `Medicine` class. Let's move on to an implementation of the class that will actually simulate the thing that does the transportation!
+
+You may be asking yourselves at this point, "Will, why are we going through the hassle of defining methods for the maximimum and minimum temperature? Why can't we just make those fields (or instance variables)?" Well, we *could* do that, but we would lose a ton of power! If a subclass of our `Medicine` declared (later) a different minimum and maximum temperature (in order to override the defaults provided by the super class), any method implemented in the superclass that attempts to access that field (instance variable) *will access the value of the field in the super class* and *not* the value in the actual class. In other words, field access does not follow open recursion! See the `java_late_binding` demo in the example code repository for this class for a more complete explanation!
 
 ## Eastbound and Down
 
