@@ -6,20 +6,20 @@ Java is an amazing language. The original designers, James Gosling, Bill Joy and
 2. Inheritance
 3. Virtual methods (*and* open recursion).
 
-In this mini assignment we will explore how Java meets each of these criteria and learn how Java allows the programmer to employ reflection, another feature often present in object-oriented programming languages. 
+In this mini assignment we will explore how Java meets each of these criteria and learn how Java allows the programmer to employ reflection, another feature often present in object-oriented programming languages.
 
 As for its support for typing, the language specification says it well:
 
 > The Java programming language is a statically typed language, which means that every variable and every expression has a type that is known at compile time.
 
-> The Java programming language is also a strongly typed language, because types limit the values that a variable ... can hold or that an expression can produce, limit the operations supported on those values, and determine the meaning of the operations. Strong static typing helps detect errors at compile time. 
+> The Java programming language is also a strongly typed language, because types limit the values that a variable ... can hold or that an expression can produce, limit the operations supported on those values, and determine the meaning of the operations. Strong static typing helps detect errors at compile time.
 
 And yet Java is known for its dynamism. This mini assignment will also explore the tension that exists in Java as a result -- the tension between the language's dynamism and its strong-typing constraints.
 
 
 ## Java is *Not* JavaScript
 
-To start, let's be very, very clear: Java is *not at all* related to JavaScript. JavaScript is a language that is specified through a group in the EU formerly known through the acronym ECMA which stood for European Computer Manufacturers Association. In 1994 the organization dropped its primary focus on Europe and became an international body. It became officially known as Ecma, which is *not* an acronym (in the same way that [KFC and Kentucky Fried Chicken may or may not be the same thing](https://www.snopes.com/fact-check/kfc-and-fried/)). The group's charter is to standardize information and computer systems. (This information is derived from the [Ecma website](https://www.ecma-international.org/about-ecma/history/)) As such, it is more accurate to refer to JavaScript as [ECMAScript](https://tc39.es/ecma262/). 
+To start, let's be very, very clear: Java is *not at all* related to JavaScript. JavaScript is a language that is specified through a group in the EU formerly known through the acronym ECMA which stood for European Computer Manufacturers Association. In 1994 the organization dropped its primary focus on Europe and became an international body. It became officially known as Ecma, which is *not* an acronym (in the same way that [KFC and Kentucky Fried Chicken may or may not be the same thing](https://www.snopes.com/fact-check/kfc-and-fried/)). The group's charter is to standardize information and computer systems. (This information is derived from the [Ecma website](https://www.ecma-international.org/about-ecma/history/)) As such, it is more accurate to refer to JavaScript as [ECMAScript](https://tc39.es/ecma262/).
 
  The original developer of JavaScript (Brandon Eich) was working for Netscape when he created the language and he is quick to remind everyone that the name JavaScript was just a ["marketing scam"](https://www.youtube.com/watch?v=WqMbzVWIAjY). The original code name for the language was Mocha and the second name was LiveScript (yes, I wrote code in LiveScript!). Brendan recalls that the goal for "Marc (Andreeson, founder of Netscape) and Bill (Joy, one of the founders of Sun Microsystems and original developer of Vi) was to make [JavaScript] the sidekick language to Java" [ref](https://www.youtube.com/watch?v=WqMbzVWIAjY).
 
@@ -29,9 +29,9 @@ To start, let's be very, very clear: Java is *not at all* related to JavaScript.
 
 First things first: Clone this repository to your development machine! You are all experts at this by now, I am sure, but there are great resources online for learning/using `git` if you want to dig deeper: [Resource](https://git-scm.com/download/mac), [Resource](https://gitforwindows.org/), [Resource](https://git-scm.com/docs/gittutorial).
 
-Next, you will need a Java SDK and Maven to complete this assignment. I *highly* recommend that you use VS Code (whether you are on Windows or macOS). There are instructions for configuring the IDE on those platforms [online](https://code.visualstudio.com/docs/java/java-build). If you choose not to use VS Code, there is plenty of documentation for configuring [your](https://docs.oracle.com/en/java/javase/15/install/installation-jdk-macos.html) [environment](https://maven.apache.org/install.html) [online](https://docs.oracle.com/en/java/javase/11/install/installation-jdk-microsoft-windows-platforms.html).
+Next, you will need a Java SDK and Maven to complete this assignment. I *highly* recommend that you use VS Code (whether you are on Windows, macOS or Linux). There are instructions for configuring the IDE on those platforms [online](https://code.visualstudio.com/docs/java/java-build). If you choose not to use VS Code, there is plenty of documentation for configuring [your](https://docs.oracle.com/en/java/javase/15/install/installation-jdk-macos.html) [environment](https://maven.apache.org/install.html) [online](https://docs.oracle.com/en/java/javase/11/install/installation-jdk-microsoft-windows-platforms.html).
 
-An SDK is a system development kit and contains the pieces that you need to develop in a particular toolset, in this case Java. The Java SDK is known as the Java Development Kit (the JDK). The JDK gives you the ability to *write* and *compile* Java code. However, it does *not* give you the ability to *execute* Java code. The tool(s) that execute Java programs are known as Java Runtime Environments (JREs). Those tools are "sold separately", as they say. What do you think might be the reason why those two groups of tools would be distributed separately?
+A system development kit (SDK) contains the pieces that you need to develop in a particular toolchain, in this case Java. The Java SDK is known as the Java Development Kit (the JDK). The JDK gives you the ability to *write* and *compile* Java code. However, it does *not* give you the ability to *execute* Java code. The tool(s) that execute Java programs are known as Java Runtime Environments (JREs). Those tools are "sold separately", as they say. What do you think might be the reason why those two groups of tools would be distributed separately?
 
 Away we go!
 
@@ -48,9 +48,9 @@ public static void main(String args[]) {
 
 If you are familiar with the signature of the `main` function in C and C++, nothing about this declaration will be surprising. The signature is defining a method (technically a `static` method) named `main` that takes an array (of variable length) of `String`s as a parameter. That array is filled with the values that are given on the *command line* when the program is executed. For the Medava application, we do not accept any input from the user when they execute the program so we will not deal with the `args` parameter any further. Even though our application will not take any input from the user on the command line, we *must* keep that parameter. (*Note*: In C/C++, the `main` function also includes parameters where values from the command line are made accessible to be programmer. However, in C/C++, naming that parameter is optional.)
 
-What do the other components of the declaration indicate? There's a `static` and a `public`. We will talk about `public` later so let's focus on `static` here. Before doing that, we have to see more context around the `main` function. Notice that the `main` function is actually in a class! Why? Because everything in Java has to be in a class. In that sense, Java can be called a pure OOP language. Unlike C++ where standalone functions are allowed (because it is a hybrid between imperative and object-oriented), everything in Java must be contained in a class. 
+What do the other components of the declaration indicate? There's a `static` and a `public`. We will talk about `public` later so let's focus on `static` here. Before doing that, we have to see more context around the `main` function. Notice that the `main` function is actually in a class! Why? Because everything in Java has to be in a class. In that sense, Java can be called a pure OOP language. Unlike C++ where standalone functions are allowed (because it is a hybrid between imperative and object-oriented), everything in Java must be contained in a class.
 
-If everything is a class, then all the subprograms that we define in Java are actually methods (which is not only the academic term of art but also the language-specific term that Java uses). Based on the definition of a method, we would expect that in order to execute one we must have instantiated an object of the type in which that method is declared! Normally, yes, that would be the case. However, using `static` keyword modifier on a method makes that method a static method and gives the programmer the power to be able to invoke that method without having to instantiate its containing class. In this case, we do not have to instantiate a `SupplyChain` class to be able to call `main`. The syntax for invoking a non-`static` method requires an instance of the class:
+If everything is a class, then all the subprograms that we define in Java are actually methods (which is not only the academic term of art in object-oriented programming for procedures that operate on the data in an instance of an abstract data type (Gamma, E., Helm, R., Johnson, R., & Vlissides, J. (1994). Design patterns: Elements of reusable object-oriented software. Addison Wesley.) but it is also the language-specific term that Java uses). Based on the definition of a method, we would expect that in order to execute one we must have instantiated an object of the type in which that method is declared! Normally, yes, that would be the case. However, using `static` keyword modifier on a method makes that method a static method and gives the programmer the power to be able to invoke that method without having to instantiate its containing class. In this case, we do not have to instantiate a `SupplyChain` class to be able to call `main`. The syntax for invoking a non-`static` method requires an instance of the class:
 
 ```Java
 
@@ -67,7 +67,7 @@ As a result, `someStaticMethod` cannot make reference to any of the member varia
 
 Because the `SupplyChain` class contains a `public`, `static` method named `main` with an appropriate set of parameters and return value, and that is the only class that we will compile that contains such a method, the Java *virtual machine* (JVM) will automatically invoke this method when the program is launched. After launching that method, the JVM will shepherd along program execution in whatever way the program's code defines.
 
-To witness this process in action (and confirm that your installation and configuration of Java is correct), add 
+To witness this process in action (and confirm that your installation and configuration of Java is correct), add
 
 ```Java
 System.out.println("Hello, <your name>! This is the WOPR speaking.");
@@ -83,11 +83,11 @@ as output), you can comment out that line of code. *Do not remove it*.
 
 ## What Goes Around Comes Around
 
-The pharmacy creates medicine and needs to ship it to the hospital. In the simulation, we are not concerned about the pharmacology of the medicine (per se) but we are concerned about how its chemical makeup might affect its transportation. For instance, does the medicine's composition require that it be refrigerated during transportation? That it cannot be jostled? That it cannot be in-transport for longer than a certain period of time?
+The pharmacy creates medicine and needs to ship it to the hospital. In the simulation, we are not concerned about the pharmacology of the medicine (per se) but we are concerned about how its chemical makeup might affect its transportation. For instance, does the medicine's composition require that it be refrigerated during transportation? That it cannot be jostled? That it cannot be in transport for longer than a certain period of time?
 
-Let's start building the `Medicine` class. The `Medicine` class will be the *base class* (what Java calls a *superclass*) for all the medicines that are transportable between point A and point B in our simulation. We will add functionality to the class (and its subclasses [what Java also calls subclasses]) throughout the assignment but there are a few things that we can configure upfront.
+Let's start building a `Medicine` class. The `Medicine` class will be the *base class* (what Java calls a *superclass*) for all the medicines that are transportable between point A and point B in our simulation. We will add functionality to the class (and its subclasses [what Java also calls subclasses]) throughout the assignment but there are a few things that we can configure upfront.
 
-When the programmer *instantiates* (creates an instance of [unhelpfully]) a class (by using the `new` keyword to write a *[class instance creation expression](https://docs.oracle.com/javase/specs/jls/se18/html/jls-15.html#jls-15.9)*), the class' *constructor* is called. The constructor is like any other method in that it takes parameters. The job of the constructor is to perform any actions that are required to initialize an instance of that particular type (e.g., initialize instance variables, configure external resource access [database connections, file handles, network connections, etc]). However, the constructor does not actually return anything and, therefore, has no return type. The constructor for our `Medicine` class will take a single parameter -- the name of the medicine (as a `String`). 
+When the programmer *instantiates* (creates an instance of [unhelpfully]) a class (by using the `new` keyword to write a *[class instance creation expression](https://docs.oracle.com/javase/specs/jls/se18/html/jls-15.html#jls-15.9)*), the class' _constructor_ is called. The job of the constructor is to perform any actions that are required to initialize an instance of that particular type (e.g., initialize instance variables, configure external resource access [database connections, file handles, network connections, etc]). The constructor is like any other method in that it may have parameters. However, the constructor differs from other methods in that its name is prescribed by the language (it must be the same as the name of the class) and it does not actually return anything and, therefore, has no return type. The constructor for our `Medicine` class will take a single parameter -- the name of the medicine (as a `String`).
 
 In the `Medicine` class in the `Medicine.java` file, write the following constructor:
 
@@ -112,18 +112,18 @@ mMedicineName = medicineName;
 
 The declaration statement declares a field named `mMedicineName` whose type is `String` and specifies that it has `private` access level. Access control in an OOP is a tool for the programmer to specify who is allowed to access an entity. Generally, access is granted/revoked according to different audiences:
 
-1. *clients*: Clients are other programmers who use a class by instantiating it. 
+1. *clients*: Clients are other programmers who use a class by instantiating it.
 2. *derivers*: Derivers are other programmers who modify/extend a class by inheriting from it (see below).
-3. *self*: Self is the programmer who is implementing the class (ie, us!).
+3. *self*: Self is the programmer who is implementing the class (i.e., us!).
 
-The *[access modifiers](https://docs.oracle.com/javase/specs/jls/se18/html/jls-6.html#jls-6.6)* that Java provides equate to those three audiences:
+The *[access modifiers](https://docs.oracle.com/javase/specs/jls/se18/html/jls-6.html#jls-6.6)* that Java provides correspond to those three audiences:
 
-1. `public`: *anyone* can access it (particularly, the *client* can access it). 
+1. `public`: *anyone* can access it (in particular, the *client* can access it).
 2. `protected`: generally speaking (there are caveats and exceptions, of course), a *protected* entity can only be accessed the programmer implementing the class or a deriver.
-3. `private`: A *private* entity can only be accessed by yourself (again, with exceptions).
+3. `private`: A *private* entity can only be accessed by itself (again, with exceptions).
 
 
-Because `mMedicineName` is declared to be private, none of our clients (or even subclasses) can get access to it directly. How, then, will they use it? We should give them a means to read that value. We will write a *getter* -- a method that allows external entities a view of a private entity. In the `Medicine` class, write the following getter:
+Because `mMedicineName` is declared to be private, none of our clients (or even subclasses) can get access to it directly. How, then, will they use it? We should give them a means to read that value. We will write a _getter_ -- a method that allows external entities a view of a private entity. In the `Medicine` class, write the following getter:
 
 ```Java
 public String getMedicineName() {
@@ -151,9 +151,9 @@ So, what of `this.minimumTemperature()` and `this.maximumTemperature()`? Will, w
 
 > ... denotes a value that is a reference to the object for which the instance method was invoked ..., or to the object being constructed.
 
-That helps! So, we know that the current method invocation (on the `isTemperatureRangeAcceptable` method) and the code in those two method invocations will have access to fields of the same instance of the `Medicine` class via the `this` instance variable. 
+That helps! So, we know that the current method invocation (on the `isTemperatureRangeAcceptable` method) and the code in those two method invocations will have access to fields of the same instance of the `Medicine` class via the `this` instance variable.
 
-It also gives us a task: we must implement those methods so that the `isTemperatureRangeAcceptable` method can use them. Obviously not every medicine has the same range of safe temperatures. However, it seems clear that there is a baseline reasonable range of temperatures outside of which our medicine will spoil. In the `Medicine` superclass, then, we will provide a so-called *default* implementation of the two methods and we will leave it up to any subclasses to *override* these methods as a way to customize functionality specific to a type of medicine. In other words, our software will rely on the support for *virtual methods* in Java to increase programmer efficiency! Type in the following method declarations to `Medicine.java`:
+It also gives us a task: we must implement those methods so that the `isTemperatureRangeAcceptable` method can use them. Obviously not every medicine has the same range of safe temperatures. However, it seems clear that there is a baseline reasonable range of temperatures outside of which our medicine will spoil. In the `Medicine` superclass, then, we will provide a so-called *default* implementation of the two methods and we will leave it up to any subclasses to _override_ these methods as a way to customize functionality specific to a type of medicine. In other words, our software will rely on the support for _virtual methods_ in Java to increase programmer efficiency! Type in the following method declarations to `Medicine.java`:
 
 ```Java
 
@@ -168,7 +168,7 @@ It also gives us a task: we must implement those methods so that the `isTemperat
 
 That's a good start for the implementation of our `Medicine` class. Let's move on to an implementation of the class that will actually simulate the thing that does the transportation!
 
-You may be asking yourselves at this point, "Will, why are we going through the hassle of defining methods for the maximimum and minimum temperature? Why can't we just make those fields (or what are called instance variables in some other languages)?" Well, we *could* do that, but we would lose a ton of power! If a subclass of our `Medicine` declared (later) a different minimum and maximum temperature field (in order to override the defaults provided by the super class), any method implemented in the superclass that attempts to access that field (instance variable) *will access the value of the field in the super class* and *not* the value in the actual class. In other words, field access does not follow open recursion! See the `java_late_binding` demo in the example code repository for this class for a more complete explanation!
+You may be asking yourselves at this point, "Will, why are we going through the hassle of defining methods for the maximum and minimum temperature? Why can't we just make those fields (or what are called instance variables in some other languages)?" Well, we *could* do that, but we would lose a ton of power! If a subclass of our `Medicine` declared (later) a different minimum and maximum temperature field (in order to override the defaults provided by the super class), any method implemented in the superclass that attempts to access that field (instance variable) *will access the value of the field in the super class* and *not* the value in the actual class. In other words, field access does not follow open recursion! See the `java_late_binding` demo in the example code repository for this class for a more complete explanation!
 
 ## Eastbound and Down
 
@@ -189,11 +189,11 @@ Whether it is a semitruck, train or plane, a thing that transports goods contain
 private List<Medicine> goods;
 ```
 
-We have seen most of those syntactic elements before, but there is one new thing. `List` is a generic type in Java. Generic types are the Java-specific way of building *parametric ADTs*. This declaration instructs Java that `goods` will be a `List` of `Medicine`s. `goods` will only support storage of instances of the `Medicine` class, and, crucially, any of its subclasses! 
+We have seen most of those syntactic elements before, but there is one new thing. `List` is a generic type in Java. Generic types are the Java-specific way of building _parametric ADTs_. This declaration instructs Java that `goods` will be a `List` of `Medicine`s. `goods` will only support storage of instances of the `Medicine` class, and, crucially, any of its subclasses!
 
-The declaration here creates a variable of *reference type*. A reference type in Java is *the* way to refer to an instance of a user-defined ADT (in other words, a class). Java's standard library is kind enough to define the `List` type for us, but our work is not done. 
+The declaration here creates a variable of _reference type_. A reference type in Java is *the* way to refer to an instance of a user-defined ADT (in other words, a class). Java's standard library is kind enough to define the `List` type for us, but our work is not done.
 
-First, we have to tell Java where to find the implementation of the `List` class. Like the `#include` preprocessor directive in C++, Java has an `import` statement. Add this import statement to the beginning of the `Transporter.java` file:
+First, we have to tell Java where to find the implementation of the `List` class. Java has the `import` statement that works like the `#include` preprocessor directive in C++. Add this import statement to the beginning of the `Transporter.java` file:
 
 ```Java
 import java.util.List;
@@ -211,7 +211,7 @@ Add the following instance initializer to the `Transporter` class:
 }
 ```
 
-Uhoh! What do we see? Java is telling us that we cannot instantiate a variable whose type is `List`. Why not? That's because `List` in Java is an *[abstract class](https://docs.oracle.com/javase/specs/jls/se18/html/jls-8.html#jls-8.1.1.1)*. An abstract class is a class in Java that specifies a set of supported methods but does not offer even a baseline implementation for at least one of those methods. You can only instantiate *subtypes* of abstract classes that implement the abstract class' methods. Java offers several different subtypes of `List` that we can choose from. To reiterate, no matter what subtype we choose, it will support the same operations as the `List`. We will, rather arbitrarily, choose the `ArrayList`. Replace the code in the instance initializer with 
+Uhoh! What do we see? Java is telling us that we cannot instantiate a variable whose type is `List`. Why not? That's because `List` in Java is an _[abstract class](https://docs.oracle.com/javase/specs/jls/se18/html/jls-8.html#jls-8.1.1.1)_. An abstract class is a class in Java that specifies a set of supported methods but does not offer even a baseline implementation for (at least one of) those methods. You can only instantiate _subclasses_ of abstract classes that implement the abstract class' methods. Java offers several different subclasses of `List` that we can choose from. To reiterate, no matter what subclass we choose, it will support the same operations as the `List` and will meet Java's technical requirements to be a _subtype_ of a `List`. We will, rather arbitrarily, choose the `ArrayList`. Replace the code in the instance initializer with
 
 ```Java
 {
@@ -243,7 +243,7 @@ public void ship() {
 
 We can add functionality later, but for now leaving the `ship` method without a meaningful body is okay.
 
-We have a thing to ship (`Medicine`s) and we have a way to ship them (`Transporter`). Let's make a few entities that will actually utilize their services.
+We have things to ship (`Medicine`s) and we have a way to ship them (`Transporter`). Let's make a few entities that will actually use the services provided by those classes.
 
 ## What Goes Around Comes Around
 
@@ -251,7 +251,7 @@ The source of our shipments is going to be the pharmacy where the drugs are prep
 
 ```Java
 public class Hospital {
-    
+
     public Hospital(String hospitalName) {
         name = hospitalName;
     }
@@ -297,7 +297,7 @@ Now that we have all the components of our simulation, let's build something tha
 
 ## As The World Turns
 
-The `HospitalRunner` class will *run* the simulation. In a simple simulation, we have a particular pharmacy send some medicine to a receiving hospital via a transporter. Our `HospitalRunner` class will expose a single method named `run` that will script a simulation like that. The code for the `HospitalRunner` class will look like this and you should add it to the `HospitalRunner.java` file:
+The `HospitalRunner` class will _run_ the simulation. In a simple simulation, we will play out what happens when a particular pharmacy sends some medicine to a receiving hospital via a transporter. Our `HospitalRunner` class will expose a single method named `run` that will script a simulation scenario like that. Add the following code for the `HospitalRunner` class to the `HospitalRunner.java` file:
 
 ```Java
 public class HospitalRunner {
@@ -336,7 +336,7 @@ Wait, don't we have to instantiate a `HospitalRunner` first before we can use it
 
 Check the output of your code at this point. Does it run? What do you see printed when it executes?
 
-If your output does not look like 
+If your output does not look like
 
 ```
 Sending an Advil.
@@ -347,7 +347,7 @@ double back and check to see if you can find the mistake.
 
 ## What Can Brown Do For You?
 
-These days, operations that claim to offer the fastest, most reliable transportation are all around. They are the subcontractors to whom Amazon, FedEx and others farm out the painstaking process of actually moving goods from one place to another (and paying their employees fair wages). A pharmacy ideally only wants to ship their goods using someone they can trust "When it absolutely, positively has to be there overnight". One of the conditions a pharmacy uses to determine the trustworthiness of a shipper is the transporter's ability to maintain a consistent temperature. The pharmacy will only ship a medicine with a transporter whose temperature-control parameters are compatible with the safe temperatures of the medicine they are sending. 
+These days, operations that claim to offer the fastest, most reliable transportation are all around. They are the subcontractors to whom Amazon, FedEx and others farm out the painstaking process of actually moving goods from one place to another (and paying their employees fair wages). A pharmacy ideally only wants to ship their goods using someone they can trust "When it absolutely, positively has to be there overnight". One of the conditions a pharmacy uses to determine the trustworthiness of a shipper is the transporter's ability to maintain a consistent temperature. The pharmacy will only ship a medicine with a transporter whose temperature-control parameters are compatible with the safe temperatures of the medicine they are sending.
 
 To equip our simulation to support such a condition, we will have to add some features to the `Transporter` class. Let's add two fields, a low temperature and a high temperature, to keep track of the low and high temperature, respectively, that the transporter guarantees. Add the following code to the `Transporter` class:
 
@@ -372,7 +372,7 @@ Not quite done yet.
 
 Well, well, well. We're in quite a pickle now. Why? In the design of our `Transporter` class we exposed the `goods` field to the client. If any client of the `Transporter` can add goods to the, er, `goods` field (willy nilly) then there is no way for the `Transporter` to enforce a guarantee that it only accept packages that it can be sure to keep safe!
 
-We've unwittingly found ourselves snakebit by failing to observe one of the prime directives of OOP: data hiding and encapsulation. To fix the flaw, we will have to go back and do some surgery (the puns keep on coming). Better to bite the bullet (another one!) now and make the fix than continue to pay the price as the software evolves.
+We've unwittingly found ourselves snakebit by failing to observe one of the prime directives of OOP: data hiding (a.k.a. encapsulation). To fix the flaw, we will have to go back and do some surgery (the puns keep on coming). Better to bite the bullet (another one!) now and make the fix than continue to pay the price as the software evolves.
 
 First, let's correct the error and make the `goods` field private:
 
@@ -430,12 +430,14 @@ and the `Hospital`'s `receive` method with this code:
     }
 ```
 
-Finally, our simulation will need to be upgraded to take advantage of the added fidelity. Change the instantiation of the `Transporter` class to 
+Finally, our simulation will need to be upgraded to take advantage of the added fidelity. Change the instantiation of the `Transporter` class to
 
 
 ```Java
         Transporter semiTruck = new Transporter("LaserShip", 30.0, 80.0);
 ```
+
+in the simulation scenario script.
 
 ## Checkpoint 2
 
@@ -453,11 +455,11 @@ Any fly-by-night shipper can move Ibuprofen from one place to another. It's an e
 
 To simulate shipping different medicines, we have a few software-design options from which to choose: We could simply change the implementation of the `Medicine` class' `minimumTemperature` and `maximumTemperature` to return different constants. That doesn't seem like a good solution -- it does not really allow us the chance to have many different types of medicines, each of which with a particular safe-temperature range. Are there other options?
 
-Of course there are! Inheritance to the rescue -- in particular, *implementation inheritance*. Let's create a subtype of the `Medicine` class that customizes the functionality of those two virtual functions in a way that more closely models the requirements for shipping a thrombolytic drug. We will name the class `Thrombolytic`. In `Java`, all `public` classes have to exist in a file with the same name as the class (with a `.java` suffix). Add the following class declaration to the `Thrombolytic.java` file:
+Of course there are! Inheritance to the rescue -- in particular, _implementation inheritance_. Let's create a subtype of the `Medicine` class that customizes the functionality of those two temperature-related virtual functions in a way that more closely models the requirements for shipping a thrombolytic drug. We will name the class `Thrombolytic`. In `Java`, all `public` classes have to exist in a file with the same name as the class (with a `.java` suffix). Add the following class declaration to the `Thrombolytic.java` file:
 
 ```Java
 public class Thrombolytic extends Medicine {
-  
+
 }
 ```
 
@@ -470,9 +472,9 @@ public Thrombolytic() {
 }
 ```
 
-Here we define a constructor for the `Thrombolytic` class that takes no parameters and uses the `super` keyword to invoke functionality in the supertype -- in particular, one of the supertype's constructor. That constructor, remember, takes a `medicineName` as a parameter and we use the pre-determined "Thrombolytic" as the value. Problem solved!
+Here we define a constructor for the `Thrombolytic` class that takes no parameters and uses the `super` keyword to invoke functionality in the supertype -- in particular, we are invoking one of the supertype's constructors. That constructor, remember, takes a `medicineName` as a parameter and we use the pre-determined "Thrombolytic" as the value. Problem solved!
 
-With that out of the way, we can get down to accomplishing our actual goal: customizing the safe temperatures of this medicine. A thrombolytic medicine generally [needs to be stored between 39.2 degrees and 41 degrees (Fahrenheit) to remain safe](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3621317/). Given that, in our implementation of the `Thrombolytic` class we will *override* the `Medicine` class' implementation of the `minimumTemperature` and `maximumTemperature` function to provide a different behavior when those methods are invoked on an instance of a `Thrombolytic` class as opposed to an instance of a `Medicine` class. Here is the first opportunity to see the power of virtual methods: A virtual method is one that is implemented by a class at several points throughout an inheritance hierarchy. In an OOP language, at runtime, the version of the virtual method specific to an object's *actual* type is chosen for execution (this feature is called open recursion or late binding). What do we mean by "actual"? In an OOP language (like Java), it is possible to assign an instance of class `C` to a variable, call it `v`, whose type restricts it to hold instances of class `B`, where `B` is a superclass of `C`. Despite the fact that the type of `v` would indicate that it holds an instance of a `B`, it *actually* holds an instance of `C`. The user of `v` is none-the-wiser because of *behavioral subtyping* (aka, the Liskov Substitution Principle). However, we want the instance of the virtual method associated with the class `C` to be invoked in this case even though the type of the variable indicates that is an instance of `B`. 
+With that out of the way, we can get down to accomplishing our actual goal: customizing the safe temperatures of this medicine. A thrombolytic medicine generally [needs to be stored between 39.2 degrees and 41 degrees (Fahrenheit) to remain safe](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3621317/). Given that, in our implementation of the `Thrombolytic` class we will _override_ the `Medicine` class' implementation of the `minimumTemperature` and `maximumTemperature` function to provide a different behavior when those methods are invoked on an instance of a `Thrombolytic` class as opposed to an instance of a `Medicine` class. Here is the first opportunity to see the power of _virtual methods_: A virtual method is one that is implemented by a class at several points throughout an inheritance hierarchy. In an OOP language, at runtime, the version of the virtual method specific to an object's *actual* type is chosen for execution (this feature is called _open recursion_ or _late binding_). What do we mean by "actual"? In an OOP language (like Java), it is possible to assign an instance of class `C` to a variable, call it `v`, whose type restricts it to hold instances of class `B`, where `B` is a superclass of `C`. Despite the fact that the type of `v` would indicate that it holds an instance of a `B`, it *actually* holds an instance of `C`. The user of `v` is none-the-wiser because of _behavioral subtyping_ (aka, the Liskov Substitution Principle). However, we want the instance of the virtual method associated with the class `C` to be invoked in this case even though the type of the variable indicates that is an instance of `B`. That's a mouthful. Let's see it work in practice.
 
 Add the following method implementations to the `Thrombolytic` class:
 
@@ -490,9 +492,9 @@ Add the following method implementations to the `Thrombolytic` class:
   }
 ```
 
-Nothing there is new, except for the `@Override` syntax. What gives? This is a so-called *[annotation](https://docs.oracle.com/javase/specs/jls/se18/html/jls-9.html#jls-9.7)*. In Java, annotations are non-functional code that provides an indication to the compiler about the programmer's intent and helps the compiler catch common errors. The [`@Override` annotation](https://docs.oracle.com/javase/tutorial/java/annotations/predefined.html) indicates to the compiler that the programmer intends to override a virtual method from the superclass. The compiler then can check to make sure that the method does properly override a method from the baseclass and will generate an error/warning if it does not. 
+Nothing there is new, except for the `@Override` syntax. What gives? This is a so-called _[annotation](https://docs.oracle.com/javase/specs/jls/se18/html/jls-9.html#jls-9.7)_. In Java, annotations are non-functional code that provides an indication to the compiler about the programmer's intent and helps the compiler catch common errors. The [`@Override` annotation](https://docs.oracle.com/javase/tutorial/java/annotations/predefined.html) indicates to the compiler that the programmer intends to override a virtual method from the superclass. The compiler then can check to make sure that the method does properly override a method from the baseclass and will generate an error/warning if it does not.
 
-Why is this helpful? 
+Why is this helpful?
 
 Let's say that I was typing too fast and wrote the following instead of what I wrote above:
 
@@ -503,7 +505,7 @@ Let's say that I was typing too fast and wrote the following instead of what I w
   }
 ```
 
-Notice the typo? Yeah, neither did I! It's hard to. The code above would compile but you would not provide an alternate, subclass-specific implementation of the `maximumTemperature` function. Had the programmer used the `@Override` annotation, the compiler would have flagged the error. Pretty useful stuff!
+Notice the typo? Yeah, neither did I! It's hard to. The code above would compile but your code would not be providing an alternate, subclass-specific implementation of the `maximumTemperature` function. Had the programmer used the `@Override` annotation, the compiler would have flagged the error. Pretty useful stuff!
 
 Now, let's update our simulation to attempt to ship one of these high-caliber medicines. First, update the code in the `Pharmacy` class to ship thrombolytic medicines. Update the `send` method of the `Pharmacy` class to look like:
 
@@ -532,7 +534,7 @@ Now, let's update our simulation to attempt to ship one of these high-caliber me
     }
 ```
 
-Notice, in particular, how we are assigning to a variable, `activase`, whose type is `Medicine` an object whose type is `Thrombolytic`. Does that remind you of the situation we discussed above (using `C` anywhere that we expected a `B` and not knowing the difference between `C` as a *subtype* of `B` and `B` itself?). 
+Notice, in particular, how we are assigning to a variable, `activase`, whose type is `Medicine`, an object whose type is `Thrombolytic`. Does that remind you of the situation we discussed above (using `C` anywhere that we expected a `B` and not knowing the difference between `C` as a _subtype_ of `B` and `B` itself?).
 
 ## Checkpoint 3
 
@@ -550,7 +552,7 @@ When you run the simulation you will notice that, indeed, Java is doing the righ
 
 ## A Better Mousetrap
 
-Let's update `HospitalRunner` to simulate what happens when a better transportation provider is used that supports a more conducive environment for medicines. Change the `run` method of the `HospitalRunner` class to look like:
+Let's update `HospitalRunner` to simulate what happens when a better transportation provider is used that supports a more conducive environment for chemimcally volatile medicines. Change the `run` method of the `HospitalRunner` class to look like:
 
 ```Java
     public static void run() {
@@ -585,9 +587,9 @@ Now that we are using a more specialized transportation provider we can safely s
 
 To this point our restrictions have focused on whether the shipper feels comfortable sending something and *not* on whether the receiver feels safe [accepting a package](https://en.wikipedia.org/wiki/The_Package_(Seinfeld)). This state of affairs must change. Hospitals are sometimes not equipped to properly handle potentially addictive medications. So-called controlled substances are given a schedule number by the [Drug Enforcement Administration](https://www.dea.gov/drug-information/drug-scheduling) (from 1 to 5), with 1 being the most addictive (and least medically necessary) and 5 being the least addictive. We will add a "sixth" category that indicates that a medicine is not a controlled substance and, therefore, does not have a schedule. To hold this information about a medicine we will add a field to the `Medicine` class.
 
-Just what type should that field be given? We *could* use an integer -- after all, 1, 2, 3, 4, 5 and 6 are all numbers. However, so, are 49, 32 and 67, but those aren't valid schedules. If we used an integer we would also be forced to use, gasp, magic values! In other words, we would have the constants `1`, `2`, `3`, etc littered throughout our code! 
+Just what type should that field be given? We *could* use an integer -- after all, 1, 2, 3, 4, 5 and 6 are all numbers. However, so, are 49, 32 and 67, but those aren't valid schedules. If we used an integer we would also be forced to use, gasp, magic values! In other words, we would have the constants `1`, `2`, `3`, etc littered throughout our code!
 
-Think about all the different possible values for a variable that holds a schedule. We *listed* them above. You could even say that we *enumerated* them. Oh, yes! Let's use an enumerated value! Java provides great support for enumerated types -- types that specify only a certain, pre-determined set of valid values -- that allow us to give the value nice, descriptive names at the same time! What is even cooler is that in Java an enumerated type is just a special type of a class. As a result, you can do things with enumerated types in Java that you cannot do in other languages (like write a constructor!). Woah.
+Think about all the different possible values for a variable that holds a schedule. We *listed* them above. You could even say that we *enumerated* them. Oh, yes! Let's use an enumerated value! Java provides great support for enumerated types -- types that only hold certain, pre-determined valid values -- that allow us to give the value nice, descriptive names at the same time! What is even cooler is that in Java an enumerated type is just a special type of a class. As a result, you can do things with enumerated types in Java that you cannot do in other languages (like write a constructor!). Boom.
 
 Again, all public classes (and, therefore, enumerated types) must be put in a separate, appropriately named file. Define the `MedicineSchedule` enumeration this way in the `MedicineSchedule.java` class:
 
@@ -631,7 +633,7 @@ This enumerated type declaration shows the full power of enumerations in Java. T
 MedicineSchedule schedule = MedicineSchedule.One;
 ```
 
-is the only way to create a new variable with the `MedicineSchedule` type. To attempt to do 
+is the only way to create a new variable with the `MedicineSchedule` type. To attempt to do
 
 ```Java
 MedicineSchedule schedule = new MedicineSchedule(1);
@@ -641,13 +643,13 @@ MedicineSchedule schedule = new MedicineSchedule(1);
 
 Great. Let's add a method to the `Medicine` class that will allow clients to ask about a `Medicine`'s schedule. In the superclass, `Medicine`, we will want that method to return some baseline or reasonable default schedule for all medicines in the absence of a more specific schedule provided by a subclass. The problem is that a default really doesn't exist! It seems dangerous to assume that if a subclass of the `Medicine` class simply omits an overriding implementation of this method that that the drug is uncontrolled. What are we to do?
 
-Let's say this: If you want to be a `Medicine`, then you *must* implement your own version of this getter method. `Medicine` will not provide you with a default! Java gives us the power to say such a thing! How cool! Add the following abstract method declaration to the `Medicine` class:
+Let's make this rule: If you want to be a `Medicine`, then you *must* implement your own version of a getter method that returns its schedule. `Medicine` will not provide you with a default! Java gives us the power to say such a thing! How cool? Add the following _abstract method_ declaration to the `Medicine` class:
 
 ```Java
     public abstract MedicineSchedule getSchedule();
 ```
 
-This causes a problem, doesn't it? If there is no implementation of a method that a declaration promises to exist, it is impossible to actually create an instance of that class. I mean, what would happen if you had created an instance of `Medicine` and you called `getSchedule` on that instance? There's no implementation! The presence of a single abstract method in a class in Java is enough to make the entire class abstract. An abstract class itself cannot be instantiated. Only subclasses of an abstract class can be instantiated. Change the declaration of the `Medicine` class so that it includes the `abstract` keyword:
+This causes a problem, doesn't it? If there is no implementation of a method that a declaration promises to exist, it is impossible to actually create an instance of that class. I mean, what would happen if you had created an instance of `Medicine` and you called `getSchedule` on that instance? There's no implementation! The presence of a single abstract method in a class in Java is enough to make the entire class abstract. An abstract class itself cannot be instantiated. Only subclasses of an abstract class can be instantiated (remember the difference between `List` and `ArrayList`?). Change the declaration of the `Medicine` class so that it includes the `abstract` keyword:
 
 ```Java
 public abstract class Medicine {
@@ -700,7 +702,7 @@ That's great, but so far we don't have any controlled substances available for s
 
 ```Java
 public class Oxycodone extends Medicine {
-  
+
   public Oxycodone() {
     super("Oxycodone");
   }
@@ -752,7 +754,6 @@ Based on the declaration of the `Oxycodone` class, what are going to be its mini
 
 Great! We are all done adding the plumbing in our simulation to support categorizing medicines based upon their schedule. Now, let's add some functionality to the receiver (the `Hospital`) to reject medicines that are controlled substances! Update the `receive` method in the `Hospital` class like this:
 
-
 ```Java
     void receive(Transporter t) {
         while (!t.isEmpty()) {
@@ -768,7 +769,7 @@ Great! We are all done adding the plumbing in our simulation to support categori
     }
 ```
 
-Notice how we are able to use the named values of the `MedicineSchedule` enumerated class in order to compare with the return value of the `getSchedule` method to make our code look really, really nice. And then, what's even better, is that we can invoke the `asString` method on a value whose type is `MedicineSchedule` and it will generate a nicely formatted string for us to print!
+Notice how we are able to use the named values of the `MedicineSchedule` enumerated class when comparing the return value of the `getSchedule` method? That makes our code look really, really nice. And then, what's even better, is that we can invoke the `asString` method on a value whose type is `MedicineSchedule` and it will generate a nicely formatted string for us to print!
 
 ## Checkpoint 4
 
@@ -797,17 +798,17 @@ Let's take stock of where we are now. We have several classes from which we can 
 
 But, like good computer scientists, we always want more! Why can't our `Transporter` class support transporting something other than `Medicine`s? After all, a semi truck or a Sprinter van can hold pretty much anything in their cargo space. Why is our simulation limited to creating transporters that can only move medicines? A great question!
 
-What field in the `Transporter` class is responsible for simulating the cargo space? The `goods` field! We declared it as a `List` and then assigned it an instance of a subclass (although we would really like it to be a subtype) of the `abstract` `List` class, the `ArrayList`. Remember that `List` and it's subclass `ArrayList` are generic classes. They require a type parameter when they are being declared and instantiated. The type parameter defines the type of the entity that the `List` (in our case, an `ArrayList`) can hold. At this point, our `Transporter`'s `goods` is declared to hold instances of the `Medicine` class (or one of its subclasses). 
+What field in the `Transporter` class is responsible for simulating the cargo space? The `goods` field! We declared it as a `List` and then assigned it an instance of a subclass (which we assessed to also be, techically, a subtype according to the Java specification) of the `abstract` `List` class, the `ArrayList`. Remember that `List` and it's subclass `ArrayList` are generic classes. They require a type parameter when they are being declared and instantiated. The type parameter defines the type of the entity that the `List` (in our case, an `ArrayList`) can hold. At this point, our `Transporter`'s `goods` is declared to hold instances of the `Medicine` class (or one of its subclasses).
 
-To make our `Transporter` more flexible, we are going to need to define a class from which anything that we can put in a `Transporter` will descend! If we want the `Transporter` to support transporting both `Medicine`s and, say, `Paint`s, perhaps we could conjure up the notion that both `Medicine` and `Paint` are forms of chemical compounds. We could define a class `ChemicalCompound` and say that `Medicine` and `Paint` derive from `ChemicalCompound` so that the `Transporter` could carry both when its cargo (`goods`) is declared to hold only instances of that type (or subclasses, of course). 
+To make our `Transporter` more flexible, we are going to need to define a class from which anything that we can put in a `Transporter` will descend! If we want the `Transporter` to support transporting both `Medicine`s and, say, `Paint`s, perhaps we could conjure up the notion that both `Medicine` and `Paint` are forms of chemical compounds. We could define a class `ChemicalCompound` and say that `Medicine` and `Paint` derive from `ChemicalCompound` so that the `Transporter` could carry both when its cargo (`goods`) is declared to hold only instances of that type (or subclasses, of course).
 
 You can see, though, how quickly we will reach the limits of credulity. For instance, if want to define a `Transporter` that supports safely transporting shelter pets and fine art, we are going to have a hard time coming up with a class from which they can both descend -- without it seeming totally absurd!
 
-The good news it that Java helps us out. Every class defined in Java implicitly inherits from the `Object` class! The `Object` class is at the root of the inheritance hierarchy and all classes descend therefrom.
+The good news is that Java helps us out. Every class defined in Java implicitly inherits from the `Object` class! The `Object` class is at the root of the inheritance hierarchy and all classes descend therefrom.
 
 ## Upgrading `Transporter`
 
-Let's take advantage of this fact and update the `Transporter` to support transporting *any* type of entity. First, let's change the declaration of the `items` field:
+Let's take advantage of this fact and update the `Transporter` to support transporting *any* type of entity. First, let's change the declaration of the `goods` field:
 
 ```Java
     private List<Object> goods;
@@ -864,7 +865,7 @@ And now you immediately see Java's unhappiness: the compiler cannot guarantee th
 
 ## When You Assume
 
-The easy solution is to assume that the objects that are unloaded from the `Transporter` that the hospital is given are actually instances of the `Medicine` class (or subclasses). We can tell Java that we, the programmer, know better than it does by using a *cast*. Though the compiler can only guarantee that instance that comes back from the `Transporter` has the methods that are defined for instances of the `Object` class, as the implementer of the `Hospital` class, we can assume that no one in their right mind would ship us something other than `Medicine`s. 
+The easy solution is to assume that the objects that are unloaded from the `Transporter` that the hospital is given are actually instances of the `Medicine` class (or subtypes). We can tell Java that we, the programmer, know better than it does by using a _cast_. Though the compiler can only guarantee that instance that comes back from the `Transporter` has the methods that are defined for instances of the `Object` class, as the implementer of the `Hospital` class, we can assume that no one in their right mind would ship us something other than `Medicine`s.
 
 ```Java
     void receive(Transporter t) {
@@ -883,7 +884,7 @@ The easy solution is to assume that the objects that are unloaded from the `Tran
 
 Although we cannot execute this code (there are still compiler errors to fix -- see below), the code that we have written to this point will perform the same as the code we wrote that was `Medicine`-specific. Great!
 
-But, leaving this code in our product is like walking a very thin rope at great heights in gale-force winds -- we are definitely living dangerously. It's like living almost as dangerously as, dramatic pause, bowling without bumpers! 
+But, leaving this code in our product is like walking a very thin rope at great heights in gale-force winds -- we are definitely living dangerously. It's like living almost as dangerously as, dramatic pause, bowling without bumpers!
 
 Let's write a class that will simulate something that a `Pharmacy` might ship to a `Hospital` but is not a `Medicine` -- a medical device. We will assume that the device is a Jarvik Artifical Heart -- `Jarvik`. Create the `Jarvik` class in the `Jarvik.java` file with the following code:
 
@@ -965,7 +966,7 @@ Now we'll upgrade the simulation so that the `Pharmacy` attempts to ship one of 
     }
 ```
 
-If we ran the simulation that contained this version of the `load` method in the `Pharmacy` class (which we can't -- again, see below), we would get a very unhappy JVM: It would report an error when it attempted to perform the cast between the unloaded item and `Medicine`! 
+If we ran the simulation that contained this version of the `load` method in the `Pharmacy` class (which we can't -- again, see below), we would get a very unhappy JVM: It would report an error when it attempted to perform the cast between the unloaded item and `Medicine`!
 
 ```
 Exception in thread "main" java.lang.ClassCastException: class edu.uc.cs3003.medava.Jarvik cannot be cast to class edu.uc.cs3003.medava.Medicine (edu.uc.cs3003.medava.Jarvik and edu.uc.cs3003.medava.Medicine are in unnamed module of loader 'app')
@@ -974,21 +975,21 @@ Exception in thread "main" java.lang.ClassCastException: class edu.uc.cs3003.med
         at edu.uc.cs3003.medava.SupplyChain.main(SupplyChain.java:6)
 ```
 
-Why? Because the `Hospital` eventually unloads an instance of the `Jarvik` class and that is *not* an instance (or subclass) of `Medicine` so the cast is invalid! But, but, but -- I know, I see it, too!
+Why? Because the `Hospital` eventually unloads an instance of the `Jarvik` class and that is *not* an instance of `Medicine` (or one of its subtypes) so the cast is invalid! But, but, but -- I know, I see it, too!
 
-`Jarvik` *is* a class that implements all the methods that we need to be able to add it to the `Transporter` -- there's a `getMedicineName`, there's a `isTemperatureRangeAcceptable`, there's even a `getSchedule`, even though it doesn't necessarily make sense. Java is [not impressed](). That static cast cannot complete because the static cast relies on nominal type equivalency and a `Jarvik` is not a `Medicine` (or subclass thereof). If Java used structural type equivalency, then we might have had a chance! But here ... no dice!
+`Jarvik` *is* a class that implements all the methods that we need to be able to add it to the `Transporter` -- there's a `getMedicineName`, there's a `isTemperatureRangeAcceptable`, there's even a `getSchedule`, even though it doesn't necessarily make sense. Java is [not impressed](). That static cast cannot complete because the static cast relies on _nominal type equivalency_ and a `Jarvik` is not a `Medicine` (or subtype thereof). If Java used structural type equivalency, then we might have had a chance! But here ... no dice!
 
 ## Mirror, Mirror On The Wall!
 
-We've avoided the elephant in the room for long enough -- none of the changes that we made above even yielded code that compiled let alone executed correctly! The compiler first encounters a problem in the `load` method of the `Transporter` class! Why? Because the `load` method relies on the fact that it can invoke a method named `isTemperatureRangeAcceptable` on the item to load to determine whether to follow the client's command. 
+We've avoided the elephant in the room for long enough -- none of the changes that we made above even yielded code that compiled let alone executed correctly! The compiler first encounters a problem in the `load` method of the `Transporter` class! Why? Because the `load` method relies on the fact that it can invoke a method named `isTemperatureRangeAcceptable` on the item to load to determine whether to follow the client's command.
 
 But, again, the type of the parameter is `Object` (because we wanted our `Transporter` to have maximum flexibility)! We know that casting is probably not a good solution. I mean, how could we determine how to write the cast when we've left ourselves wide open to accepting an instance of absolutely any Java type?
 
-There's still hope, though! Java provides an amazing set of functionality under the umbrella of *reflection*. Reflection is a feature of a programming language that "allows its programs to have run-time access to their types and structures and to be able to dynamically modify their behavior." (Sebesta)
+There's still hope, though! Java provides an amazing set of functionality under the umbrella of _reflection_. Reflection is a feature of a programming language that "allows its programs to have run-time access to their types and structures and to be able to dynamically modify their behavior." (Sebesta)
 
-Our simulation software (in particular, the `Transporter` and `Hospital` class) can use reflection to dynamically check whether the item to be loaded and shipped has the proper validation methods (ie., `isTemperatureRangeAcceptable`, `getSchedule`, `getMedicineName`). Based on the result of that check, the `Transporter` and `Hospital` classes will modify their behavior:
+Our simulation software (in particular, the `Transporter` and `Hospital` class) can use reflection to dynamically check whether the item to be loaded and shipped has the proper validation methods (i.e., `isTemperatureRangeAcceptable`, `getSchedule`, `getMedicineName`). Based on the result of that check, the `Transporter` and `Hospital` classes will modify their behavior:
 
-1. In the `Transporter` class, if the `isTemperatureRangeAcceptable` function is not available, the function will assume that it cannot be added to the cargo bay; if the validation method *is* available, then the `load` method of the `Transporter` class will call it just as it did before!
+1. In the `Transporter` class, if the `isTemperatureRangeAcceptable` function is not available on the method being `load`ed, the function will assume that it cannot be added to the transporter's cargo bay; if the validation method *is* available, then the `load` method of the `Transporter` class will call it just as it did before to make the "can ship" determination!
 1. In the `Hospital` class, if the `getSchedule` method is not available during `receive`, the method will assume that it cannot be received; if the validation method *is* available, then the `receive` method of the `Hospital` class will call it just as it did before!
 
 Totally, totally cool! The syntax of reflection is a little mind bending and a little meta. Here's the updated code for the `load` method of the `Transporter` class:
@@ -1018,16 +1019,82 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 ```
 
-There is definitely a ton going on here. First, we see a new type of control-flow construct known as the `try`-`catch` statement. The semantics go like this: The statements in the so-called `try` block are executed from top to bottom. If any of those statements *throws* an exception, we know that an unexpected situation has transpired! The exception that is *thrown* is a value just like anything else in Java and, therefore, has a type and a value. The `catch` phrase (get it?) lists a sequence of types and then gives a variable name. If the thrown exception is any one of those types, the exception is assigned to the variable (`e` in this case) and then the code in that so-called `catch` block is executed. As you can see, there are many, *many* things that can go wrong when using reflection. 
+There is definitely a ton going on here. First, we see a new type of control-flow construct known as the `try`-`catch` statement. The semantics go like this: The statements in the so-called `try` block are executed from top to bottom. If any of those statements (or in statements that are in methods called by those statements, and so on!) _throws_ an exception, we know that an unexpected situation has transpired! The exception that is _thrown_ is an object just like anything else in Java and, therefore, has a type and a value. The `catch` phrase (get it?) lists a sequence of types and then gives a variable name. Java looks sequentially throw the `catch` phrases to find a class that matches the *actual* type of the thrown exception. The code in the first matching phrase is executed with the exception assigned to the named variable (`e` in this case).
 
-Now, let's get on with the real work. Our first task is to determine if the object has a method of a certain name and, if so, whether that method takes the types of parameters that we expect it to. The `getMethod` method takes the name of the method in question as the first parameter and then a variably sized list of *classes* that describe the parameters of the method named in the first parameter:
+Here is a stripped down example of code that uses `try`-`catch` to show just how flexible Java is with respect to handling exceptions:
+
+```Java
+      try {
+            ...
+            throw new BadHairDayException();
+            ...
+        } catch (BadNameException bne) {
+            System.out.println("There was a bad name exception.");
+        } catch (BadHairDayException bhde) {
+            System.out.println("There was a bad hair day exception.");
+        } catch (Exception bae) {
+            System.out.println("There was a generic exception.");
+        }
+```
+
+will print
+
+```console
+There was a bad hair day exception.
+```
+
+On the other hand,
+
+```Java
+      try {
+            ...
+            throw new BadNameException();
+            ...
+        } catch (BadNameException bne) {
+            System.out.println("There was a bad name exception.");
+        } catch (BadHairDayException bhde) {
+            System.out.println("There was a bad hair day exception.");
+        } catch (Exception bae) {
+            System.out.println("There was a generic exception.");
+        }
+```
+
+will print
+
+```console
+There was a bad name exception.
+```
+
+Because every exception is ultimately a subclass of `Exception`, we can add an exception handler that will match any thrown exception:
+
+```Java
+      try {
+            ...
+            throw new BadAttitudeException();
+            ...
+        } catch (BadNameException bne) {
+            System.out.println("There was a bad name exception.");
+        } catch (BadHairDayException bhde) {
+            System.out.println("There was a bad hair day exception.");
+        } catch (Exception bae) {
+            System.out.println("There was a generic exception.");
+        }
+```
+
+will print
+
+```console
+There was a generic exception.
+```
+
+Now, let's get on with the real work. Our first task is to determine if the object the user wants to load has a method of a certain name and, if so, whether that method takes the types of parameters that we expect it to. The `getMethod` method takes the name of the method in question as the first parameter and then a variably sized list of *classes* that describe the parameters of the method named in the first parameter:
 
 ```Java
             Method isTemperatureRangeAcceptableMethod = itemToLoad.getClass().getMethod("isTemperatureRangeAcceptable",
                     Double.class, Double.class);
-``` 
+```
 
-is searching `itemToLoad` to find a handle for a method named `isTemperatureRangeAcceptable` that takes two `Double` instances. If there is no such method (or some other error occurs), then an exception is thrown. As soon as the first exception is thrown in a `try` block, no further code in the `try` block is executed! Our `catch` block simply returns `false` to indicate (defensively) that the item to be loaded cannot be shipped in the current transporter. The method handle that is (conditionally) found is an instance of a class -- just like *everything* in Java (with a few exceptions). That class offers its clients an `invoke` method that gives us the power to invoke that found method on a particular object with a particular set of parameters. If you squint, 
+is searching `itemToLoad` to find a handle for a method named `isTemperatureRangeAcceptable` that takes two `Double` instances as parameters. If there is no such method (or some other error occurs), then an exception is thrown. As soon as the first exception is thrown in a `try` block, no further code in the `try` block is executed! Our `catch` block simply returns `false` to indicate (defensively) that the item to be loaded cannot be shipped in the current transporter. The method handle that is (conditionally) found is an instance of a class -- just like *everything* in Java (with a few exceptions). That class offers its clients an `invoke` method that gives us the power to invoke that found method on a particular object with a particular set of parameters. If you squint,
 
 
 ```Java
@@ -1042,7 +1109,7 @@ looks very much like
         boolean resultOfMethodCall = itemToLoad.isTemperatureRangeAcceptable(lowTemperature, highTemperature);
 ```
 
-and that's no coincidence -- they are doing the exact same thing! 
+and that's no coincidence -- they are doing the exact same thing!
 
 Now, if you don't think *that's* cool, then ...
 
@@ -1108,9 +1175,9 @@ Accepted a shipment of Jarvik Artificial Heart.
 
 Reflection is a really powerful technique and a tool that we appreciate having in the toolchest. However, we should not rely on it when there are alternate methods. Reflection is definitely not the fastest way to accomplish our goal here. Determining at runtime whether an object supports certain methods is much slower than letting the compiler do it before the program is ever even executed.
 
-Does Java give us a way to solve the problem? Let's first remind ourselves what the problem actually is: 
+Does Java give us a way to solve the problem? Let's first remind ourselves what the problem actually is:
 
-1. We have a generic data structure (in this case the `Transporter` class) that works with instances of a wide range of classes where the only requirement on those objects' types is that they support a (very limited) number of methods. 
+1. We have a generic data structure (in this case the `Transporter` and `Hospital` classes) that works with instances of a wide range of classes where the only requirement on those objects' types is that they support a (very limited) number of methods (e.g., the `isTemperatureRangeAcceptable`, `getSchedule`, and `getMedicineName` methods).
 2. The range of instances that the generic data structure must handle are of types that do not share a common base class.
 
 The solution is one that is becoming increasingly common in OOP language and others that do not fit the traditional model of object orientation (e.g., go, and Rust): interfaces (go calls them [interfaces](https://go.dev/ref/spec#Interface_types) and Rust calls them [traits](https://doc.rust-lang.org/book/ch10-02-traits.html))
@@ -1133,9 +1200,11 @@ public interface Shippable {
 
 Add that to the `Shippable.java` file.
 
-Once the interface is defined, we can use it in place of a type throughout Java. Anywhere that we use this interface for the type of a variable, we can assume that the compiler has guaranteed the object implements *at least* those methods. The object might support additional methods (the compiler won't know what they are!), but it knows that it can invoke at least those methods on that variable!
+Once the interface is defined, we can use it in place of a type throughout Java. Use of an interface in place of a type in the code lets the compiler guarantee the object implements *at least* the methods declared in the interface. The object might support additional methods (the compiler won't know what they are!), but it guarantees that it is safe for us programmers to invoke at least those methods on that variable!
 
-We'll change the `Transporter` class to use the `Shippable` interface. First, modify the `items` declaration:
+We previously used classes and inheritance to solve this very problem. However, remember above why we ended up deciding to use an `Object` as the type of the parameter to the `load` and `receive` methods: Because there was nothing else that a `Medicine` and, say, a `Jarvik` artificial heart have in common. The only thing that the objects we want to ship have in common are a certain set of methods. Interfaces give us the power to express just that requirement to the compiler, and nothing more! Pretty amazing!
+
+Let's change the `Transporter` class to use the `Shippable` interface. First, modify the `goods` declaration:
 
 ```Java
 private List<Shippable> goods;
@@ -1218,7 +1287,7 @@ Accepted a shipment of Jarvik Artificial Heart.
 
 ## Conclusion
 
-Some would say that we are all just living in a giant computer simulation. I don't believe it. However, we did work our way through creation of a very powerful simulation system that takes advantage of some very interesting parts of the Java OOP language. We learned about Java's 
+Some would say that we are all just living in a giant computer simulation. I don't believe it. However, we did work our way through creation of a very powerful simulation system that takes advantage of some very interesting parts of the Java OOP language. We learned about Java's
 
 1. support for inheritance
 2. static methods
