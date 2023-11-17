@@ -1,0 +1,8 @@
+How does exception handling in Java help in creating robust applications, and what are the best practices for using try, catch, and finally blocks?
+
+What are the advantages of using enumerated types in Java, and how do they compare to static final constants when it comes to type safety and code maintainability?
+
+What are the scenarios in which you would choose an abstract class over an interface in Java, and can you have a class that implements multiple interfaces or extends multiple abstract classes?
+
+How does the JVM work, and what are the roles of the Just-In-Time (JIT) compiler and the garbage collector within the JVM?
+
