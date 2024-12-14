@@ -237,9 +237,9 @@ Well, that's swell, but why not just write the initializers in the constructor? 
 
 First, remember that constructors in Java are just like any other method and all methods in Java can be overloaded (we will come back to the full details of overloading later).As a result, it is possible that we could define _several_ constructors for a class that could each be responsible for initializing an instance of the class depending on whether certain elements are present! That could lead to significant duplication of code if there are some common initializations necessary for fields that must happen regardless of which constructor the user invokes.
 
-No matter which constructor is invoked, the code in instance initializers is guaranteed to be executed _after_ the constructor[^after]! Woah!
+No matter which constructor is invoked, the code in instance initializers is guaranteed to be executed _before_ the constructor[^before]! Woah!
 
-[^after]: Note that it does not matter where, syntactically, the instance initializer goes in the code we write for the class (with respect to the constructors or other methods).
+[^before]: Note that it does not matter where, syntactically, the instance initializer goes in the code we write for the class (with respect to the constructors or other methods).
 
 Add the following instance initializer to the `Transporter` class:
 
